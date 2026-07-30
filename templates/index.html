@@ -209,7 +209,7 @@
         <header class="header">
             <div>
                 <h1>Trợ lý AI sinh viên</h1>
-                <p>Ứng dụng Flask tích hợp Gemini API</p>
+                <p>Ứng dụng Django tích hợp Gemini API</p>
             </div>
 
             <div class="header-actions">
@@ -298,6 +298,26 @@
             });
         }
 
+        function getCookie(name) {
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(
+                    cookie.substring(name.length + 1)
+                );
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
         async function sendMessage() {
             const text = messageInput.value.trim();
 
@@ -324,10 +344,11 @@
             );
 
             try {
-                const response = await fetch("/chat", {
+                const response = await fetch("/chat/", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie("csrftoken")
                     },
                     body: JSON.stringify({
                         message: text
